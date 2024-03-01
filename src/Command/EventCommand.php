@@ -14,19 +14,21 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
     description: 'Returns details of events.',
     hidden: false,
 )]
-class EventCommand extends Command {
+class EventCommand extends Command
+{
 
     public function __construct(
         private EventService $eventService,
         private ContainerBagInterface $params,
-    ){
+    ) {
         parent::__construct();
     }
-    
-    protected function execute(InputInterface $input, OutputInterface $output) : int {
-        $events = $this->eventService->getEventsDetail($this->params->get('app.events_link'));
 
-        $output->writeln(json_encode($events));
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $events = $this->eventService->getEventDetailsAsJson($this->params->get('app.events_link'));
+
+        $output->writeln($events);
 
         return Command::SUCCESS;
     }

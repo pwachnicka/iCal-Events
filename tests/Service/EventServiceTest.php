@@ -6,10 +6,14 @@ use ICal\ICal;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\TestCase;
 use App\Service\EventService;
+use App\Service\FileManagerService;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class EventServiceTest extends TestCase {
+class EventServiceTest extends TestCase
+{
 
-    public function test_should_return_array_of_contents_for_existing_ical_file() {
+    public function test_should_return_array_of_contents_for_existing_ical_file()
+    {
         $icalFileName = 'icalFile.ical';
 
         /** @var ICal&MockObject $iCalMock */
@@ -39,10 +43,11 @@ class EventServiceTest extends TestCase {
             ->will($this->returnArgument(0));
 
         $loggerMock = $this->createMock(LoggerInterface::class);
+        $fileManagerMock = $this->createMock(FileManagerService::class);
 
-        $eventService = new EventService($iCalMock, $loggerMock);
+        $eventService = new EventService($iCalMock, $loggerMock, $fileManagerMock);
 
-        $eventDetails = $eventService->getEventsDetail($icalFileName);
+        $eventDetails = $eventService->getEventDetails($icalFileName);
 
         $this->assertIsArray($eventDetails);
         $this->assertEquals(2, count($eventDetails));
@@ -61,7 +66,3 @@ class EventServiceTest extends TestCase {
         ], $eventDetails);
     }
 }
-                    
-                    
-                    
-                    
